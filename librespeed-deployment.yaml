@@ -15,12 +15,11 @@ metadata:
   namespace: final
   labels: 
     app.kubernetes.io/instance: librespeed
-type: Opaque
-stringData:
+data:
   MODE: frontend
-  TELEMETRY: true
-  ENABLE_ID_OBFUSCATION: true
-  REDACT_IP_ADDRESSES: false
+  TELEMETRY: 'true'
+  ENABLE_ID_OBFUSCATION: 'true'
+  REDACT_IP_ADDRESSES: 'false'
   DB_TYPE: mysql
   DB_HOSTNAME: mysql-headless.db.svc
   DB_NAME: speedtest_telemetry
@@ -346,6 +345,11 @@ spec:
       labels:
         app.kubernetes.io/instance: librespeed
     spec:
+      initContainers:
+      - name: wait-for-mysql
+        image: busybox:1.36
+        command: ['/bin/sh']
+        args: ['-c', 'until nc -z mysql.db.svc.cluster.local 3306; do echo waiting_mysql; sleep 2;done']
       containers:
       - image: registry.rebrainme.com/workshops/middle/kubernetes-local/newplatform_autochecks/speedtest:5.3
         name: speedtest

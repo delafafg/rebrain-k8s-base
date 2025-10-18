@@ -16,7 +16,6 @@ metadata:
     app: db
   namespace: db
 spec:
-  storageClassName: manual
   capacity:
     storage: 20Gi
   accessModes:
@@ -32,7 +31,8 @@ metadata:
     app: db
   namespace: db
 spec:
-  storageClassName: manual
+  storageClassName: ''
+  volumeName: mysql-pv-volume
   accessModes:
     - ReadWriteOnce
   resources:
